@@ -1,5 +1,4 @@
 (function(){
-  /* ── REVIEWS DATA ───────────────────────────── */
   var GOOGLE_URL = 'https://www.google.com/maps/place/Bilingual+Bridges/@39.8669469,-86.1524951,17z';
   var REVIEWS = [
     { text: 'The summer pass was amazing for many families, but especially for a family that I am well familiar with \u2014 they have six children and four of those children were able to do unlimited classes Monday through Sunday at the cost of $49 for the whole family. Thank you so much for making this provision. I know they are going to benefit greatly for the upcoming school year.', name: 'Elsa Helms', ini: 'EH', stars: 5 },
@@ -28,10 +27,12 @@
   var AUTO = 7000, cur = 0, pv = 0, pt = null;
   var FF = "-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif";
 
-  /* ── INJECT CSS ─────────────────────────────── */
   var css = [
-    '#bbw{position:fixed!important;bottom:28px!important;left:28px!important;width:min(340px,calc(100vw - 32px))!important;z-index:999999!important;font-family:'+FF+'!important;line-height:normal!important;box-sizing:border-box!important}',
+    /* ── ROOT: desktop floats bottom-left, mobile same anchor ── */
+    '#bbw{position:fixed!important;bottom:28px!important;left:28px!important;z-index:999998!important;font-family:'+FF+'!important;line-height:normal!important;box-sizing:border-box!important;width:min(340px,calc(100vw - 32px))!important}',
     '#bbw *,#bbw *::before,#bbw *::after{box-sizing:border-box!important;margin:0!important;padding:0!important;line-height:normal!important;font-family:'+FF+'!important}',
+
+    /* ── DESKTOP PILL (hidden on mobile) ── */
     '#bbw-pill{display:flex!important;align-items:center!important;gap:10px!important;background:#fff!important;border:1.5px solid #e5e5e5!important;border-radius:100px!important;padding:9px 16px 9px 10px!important;cursor:pointer!important;box-shadow:0 6px 24px rgba(0,0,0,.12)!important;transition:transform .2s,box-shadow .2s!important;user-select:none!important}',
     '#bbw-pill:hover{transform:translateY(-2px)!important;box-shadow:0 10px 32px rgba(0,0,0,.16)!important}',
     '#bbw-pill-icon{width:36px!important;height:36px!important;min-width:36px!important;background:#fff!important;border-radius:50%!important;display:flex!important;align-items:center!important;justify-content:center!important;box-shadow:0 1px 4px rgba(0,0,0,.15)!important;border:1px solid #eee!important}',
@@ -41,9 +42,18 @@
     '#bbw-pill-text span{display:block!important;font-size:11px!important;color:#999!important;margin-top:1px!important}',
     '#bbw-pill-right{display:flex!important;flex-direction:column!important;align-items:flex-end!important;gap:3px!important}',
     '#bbw-pill-score{font-size:13px!important;font-weight:700!important;color:#111!important;display:flex!important;align-items:center!important;gap:3px!important}',
-    '#bbw-pill-score svg{width:11px!important;height:11px!important;fill:#e8a020!important;display:block!important}',
+    '#bbw-pill-score svg,#bbw-pill-stars svg{fill:#e8a020!important;display:block!important}',
+    '#bbw-pill-score svg{width:11px!important;height:11px!important}',
     '#bbw-pill-stars{display:flex!important;gap:2px!important}',
-    '#bbw-pill-stars svg{width:9px!important;height:9px!important;fill:#e8a020!important;display:block!important}',
+    '#bbw-pill-stars svg{width:9px!important;height:9px!important}',
+
+    /* ── MOBILE ICON BUTTON (hidden on desktop) ── */
+    '#bbw-mob-btn{display:none!important;width:48px!important;height:48px!important;border-radius:50%!important;background:#fff!important;border:1.5px solid #e8e8e8!important;box-shadow:0 3px 12px rgba(0,0,0,.15)!important;cursor:pointer!important;align-items:center!important;justify-content:center!important;-webkit-tap-highlight-color:transparent!important;position:relative!important;flex-direction:column!important;gap:1px!important}',
+    '#bbw-mob-btn svg{width:22px!important;height:22px!important;display:block!important}',
+    '#bbw-mob-badge{font-size:8.5px!important;font-weight:700!important;color:#e8a020!important;letter-spacing:.01em!important;display:flex!important;align-items:center!important;gap:1px!important}',
+    '#bbw-mob-badge svg{width:8px!important;height:8px!important;fill:#e8a020!important;display:block!important}',
+
+    /* ── CARD (desktop: floats above pill; mobile: bottom sheet) ── */
     '#bbw-card{background:#fff!important;border:1.5px solid #ebebeb!important;border-radius:18px!important;overflow:hidden!important;box-shadow:0 16px 48px rgba(0,0,0,.13)!important;margin-bottom:10px!important;display:flex!important;flex-direction:column!important;max-height:calc(100vh - 80px)!important}',
     '#bbw-head{display:flex!important;align-items:center!important;gap:10px!important;padding:14px 16px!important;background:#fafafa!important;border-bottom:1px solid #f0f0f0!important;flex-shrink:0!important}',
     '#bbw-head-icon{width:36px!important;height:36px!important;min-width:36px!important;background:#fff!important;border-radius:9px!important;display:flex!important;align-items:center!important;justify-content:center!important;box-shadow:0 1px 4px rgba(0,0,0,.12)!important;border:1px solid #eee!important}',
@@ -83,27 +93,41 @@
     '#bbw-nav{display:flex!important;gap:5px!important}',
     '#bbw-nav button{width:28px!important;height:28px!important;border-radius:50%!important;border:1.5px solid #e0e0e0!important;background:transparent!important;color:#888!important;font-size:15px!important;cursor:pointer!important;display:flex!important;align-items:center!important;justify-content:center!important;transition:background .2s,color .2s!important;-webkit-tap-highlight-color:transparent!important}',
     '#bbw-nav button:hover{background:#111!important;color:#fff!important;border-color:#111!important}',
+
+    /* ── SHOW/HIDE STATES ── */
     '#bbw-card{display:none!important}',
     '#bbw.bbw-open #bbw-pill{display:none!important}',
     '#bbw.bbw-open #bbw-card{display:flex!important}',
-    '@media(max-width:480px){#bbw{bottom:90px!important;left:12px!important;width:calc(100vw - 24px)!important}#bbw-pill{padding:7px 12px 7px 8px!important}#bbw-card{max-height:70vh!important}}'
+
+    /* ── MOBILE OVERRIDES ≤ 480px ── */
+    /* Switch pill → icon, card becomes compact bottom-left sheet */
+    '@media(max-width:480px){',
+      '#bbw{bottom:90px!important;left:16px!important;width:auto!important}',
+      /* hide desktop pill, show icon btn */
+      '#bbw-pill{display:none!important}',
+      '#bbw-mob-btn{display:flex!important}',
+      /* when open: hide icon, show card */
+      '#bbw.bbw-open #bbw-mob-btn{display:none!important}',
+      '#bbw.bbw-open #bbw-card{display:flex!important;width:min(320px,calc(100vw - 32px))!important;max-height:60vh!important;border-radius:16px!important;margin-bottom:10px!important}',
+    '}'
   ].join('');
 
   var styleEl = document.createElement('style');
   styleEl.textContent = css;
   document.head.appendChild(styleEl);
 
-  /* ── SVG HELPERS ────────────────────────────── */
+  /* ── SVG HELPERS ── */
   var gLogo = '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>';
   var starSvg = '<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
   var checkSvg = '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
   var stars5 = starSvg+starSvg+starSvg+starSvg+starSvg;
 
-  /* ── BUILD HTML ─────────────────────────────── */
+  /* ── BUILD HTML ── */
   var root = document.createElement('div');
   root.id = 'bbw';
 
   root.innerHTML =
+    /* card */
     '<div id="bbw-card">' +
       '<div id="bbw-head">' +
         '<div id="bbw-head-icon">' + gLogo + '</div>' +
@@ -121,6 +145,7 @@
         '<div id="bbw-nav"><button id="bbwP" aria-label="Previous">\u2039</button><button id="bbwN" aria-label="Next">\u203a</button></div>' +
       '</div>' +
     '</div>' +
+    /* desktop pill */
     '<div id="bbw-pill">' +
       '<div id="bbw-pill-icon">' + gLogo + '</div>' +
       '<div id="bbw-pill-text"><strong>Client Reviews</strong><span>Verified on Google</span></div>' +
@@ -128,21 +153,28 @@
         '<div id="bbw-pill-score"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>5.0</div>' +
         '<div id="bbw-pill-stars">' + stars5 + '</div>' +
       '</div>' +
+    '</div>' +
+    /* mobile icon button */
+    '<div id="bbw-mob-btn" aria-label="See reviews">' +
+      gLogo +
+      '<div id="bbw-mob-badge">' +
+        '<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>' +
+        '5.0' +
+      '</div>' +
     '</div>';
 
   document.body.appendChild(root);
 
-  /* ── BUILD SLIDES ───────────────────────────── */
+  /* ── BUILD SLIDES ── */
   var bodyEl  = root.querySelector('#bbw-body');
   var fillEl  = root.querySelector('#bbw-fill');
   var counter = root.querySelector('#bbw-counter');
 
   REVIEWS.forEach(function(r, i) {
-    var starsHtml = Array(r.stars).fill(starSvg).join('');
     var el = document.createElement('div');
     el.className = 'bbw-slide' + (i === 0 ? ' bbw-on' : '');
     el.innerHTML =
-      '<div class="bbw-s-stars">' + starsHtml + '</div>' +
+      '<div class="bbw-s-stars">' + Array(r.stars).fill(starSvg).join('') + '</div>' +
       '<div class="bbw-s-text">\u201c' + r.text + '\u201d</div>' +
       '<div class="bbw-s-author">' +
         '<div class="bbw-s-avatar">' + r.ini + '</div>' +
@@ -152,44 +184,56 @@
     bodyEl.appendChild(el);
   });
 
-  /* ── LOGIC ──────────────────────────────────── */
-  function updateCounter() { counter.innerHTML = '<strong>' + (cur + 1) + '</strong> / ' + TOTAL; }
+  /* ── LOGIC ── */
+  function updateCounter(){ counter.innerHTML = '<strong>'+(cur+1)+'</strong> / '+TOTAL; }
 
-  function goTo(idx) {
+  function goTo(idx){
     root.querySelectorAll('.bbw-slide')[cur].classList.remove('bbw-on');
-    cur = (idx + TOTAL) % TOTAL;
+    cur = (idx+TOTAL)%TOTAL;
     root.querySelectorAll('.bbw-slide')[cur].classList.add('bbw-on');
     bodyEl.scrollTop = 0;
     updateCounter();
     bbwReset();
   }
 
-  function bbwReset() {
-    clearInterval(pt); pv = 0; fillEl.style.width = '0%';
-    pt = setInterval(function() {
-      pv += 100 / (AUTO / 100);
-      if (pv >= 100) { pv = 0; goTo(cur + 1); return; }
-      fillEl.style.width = pv + '%';
-    }, 100);
+  function bbwReset(){
+    clearInterval(pt); pv=0; fillEl.style.width='0%';
+    pt = setInterval(function(){
+      pv += 100/(AUTO/100);
+      if(pv>=100){ pv=0; goTo(cur+1); return; }
+      fillEl.style.width = pv+'%';
+    },100);
   }
   window.bbwReset = bbwReset;
-
   updateCounter();
 
-  root.querySelector('#bbwN').addEventListener('click', function() { goTo(cur + 1); });
-  root.querySelector('#bbwP').addEventListener('click', function() { goTo(cur - 1); });
-  root.querySelector('#bbw-close').addEventListener('click', function() { root.classList.remove('bbw-open'); clearInterval(pt); });
-  root.querySelector('#bbw-pill').addEventListener('click', function() { root.classList.add('bbw-open'); bbwReset(); });
+  var isMobile = function(){ return window.innerWidth <= 480; };
+
+  function openWidget(){
+    root.classList.add('bbw-open');
+    bbwReset();
+  }
+  function closeWidget(){
+    root.classList.remove('bbw-open');
+    clearInterval(pt);
+  }
+
+  root.querySelector('#bbwN').addEventListener('click', function(){ goTo(cur+1); });
+  root.querySelector('#bbwP').addEventListener('click', function(){ goTo(cur-1); });
+  root.querySelector('#bbw-close').addEventListener('click', closeWidget);
+  root.querySelector('#bbw-pill').addEventListener('click', openWidget);
+  root.querySelector('#bbw-mob-btn').addEventListener('click', openWidget);
 
   var card = root.querySelector('#bbw-card');
-  card.addEventListener('mouseenter', function() { clearInterval(pt); });
-  card.addEventListener('mouseleave', function() { if (root.classList.contains('bbw-open')) bbwReset(); });
+  card.addEventListener('mouseenter', function(){ clearInterval(pt); });
+  card.addEventListener('mouseleave', function(){ if(root.classList.contains('bbw-open')) bbwReset(); });
 
-  document.addEventListener('click', function(e) {
-    if (root.classList.contains('bbw-open') && !root.contains(e.target)) {
-      root.classList.remove('bbw-open'); clearInterval(pt);
-    }
+  document.addEventListener('click', function(e){
+    if(root.classList.contains('bbw-open') && !root.contains(e.target)) closeWidget();
   });
 
-  setTimeout(function() { root.classList.add('bbw-open'); bbwReset(); }, 3000);
+  /* Auto-open on desktop only */
+  setTimeout(function(){
+    if(!isMobile()) openWidget();
+  }, 3000);
 })();
