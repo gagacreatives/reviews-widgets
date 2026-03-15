@@ -86,7 +86,7 @@
     '#bbw-card{display:none!important}',
     '#bbw.bbw-open #bbw-pill{display:none!important}',
     '#bbw.bbw-open #bbw-card{display:flex!important}',
-    '@media(max-width:480px){#bbw{bottom:0!important;left:0!important;width:100vw!important}#bbw-pill{border-radius:100px!important;margin:0 12px 12px!important;width:calc(100% - 24px)!important}#bbw-card{border-radius:18px 18px 0 0!important;max-height:82vh!important}}'
+    '@media(max-width:480px){#bbw{bottom:90px!important;left:12px!important;width:calc(100vw - 24px)!important}#bbw-pill{padding:7px 12px 7px 8px!important}#bbw-card{max-height:70vh!important}}'
   ].join('');
 
   var styleEl = document.createElement('style');
