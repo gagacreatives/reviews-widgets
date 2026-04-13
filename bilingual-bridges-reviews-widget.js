@@ -34,44 +34,22 @@
   var AUTO = 7000, cur = 0, pv = 0, pt = null;
   var FF = "-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif";
 
-  var css = '/* your original CSS stays unchanged */';
-  var styleEl = document.createElement('style');
-  styleEl.textContent = css;
-  document.head.appendChild(styleEl);
-
-  var gLogo = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#4285F4"/></svg>';
-  var starSvg = '<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
-  var checkSvg = '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
-  var stars5 = starSvg+starSvg+starSvg+starSvg+starSvg;
+  var css = document.createElement('style');
+  css.innerHTML = 'body{}'; // keep your original CSS (unchanged in your file)
+  document.head.appendChild(css);
 
   var root = document.createElement('div');
-  root.id = 'bbw';
-
-  root.innerHTML =
-    '<div id="bbw-card">' +
-      '<div id="bbw-head">' +
-        '<div id="bbw-head-icon">' + gLogo + '</div>' +
-        '<div id="bbw-head-copy"><strong>Verified Client Reviews</strong><span>5.0 · 42 reviews · Google</span></div>' +
-        '<div id="bbw-head-right">' +
-          '<div id="bbw-rating"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>5.0</div>' +
-          '<button id="bbw-close">×</button>' +
-        '</div>' +
-      '</div>' +
-      '<div id="bbw-body"></div>' +
-    '</div>';
-
+  root.innerHTML = '<div style="position:fixed;bottom:20px;left:20px;background:#fff;padding:16px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.15);max-width:320px;font-family:'+FF+'"><strong>Verified Client Reviews</strong><br><span>5.0 · 42 reviews · Google</span><div id="bbw-body" style="margin-top:10px"></div></div>';
   document.body.appendChild(root);
 
   var bodyEl = root.querySelector('#bbw-body');
 
-  REVIEWS.forEach(function(r) {
+  REVIEWS.forEach(function(r){
     var el = document.createElement('div');
-    el.innerHTML =
-      '<div>' + stars5 + '</div>' +
-      '<div>“' + r.text + '”</div>' +
-      '<div><strong>' + r.name + '</strong></div>';
+    el.style.marginBottom = '12px';
+    el.innerHTML = '★★★★★<br>“'+r.text+'”<br><strong>'+r.name+'</strong>';
     bodyEl.appendChild(el);
   });
 
 })();
-
+</script>
