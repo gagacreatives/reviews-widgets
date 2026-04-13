@@ -1,4 +1,3 @@
-<script>
 (function(){ 
   var GOOGLE_URL = 'https://www.google.com/maps/place/Bilingual+Bridges/@39.8669469,-86.1524951,17z';
 
@@ -75,4 +74,4 @@
   });
 
 })();
-</script>
+
