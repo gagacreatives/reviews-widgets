@@ -30,7 +30,15 @@
 
   var TOTAL = REVIEWS.length;
   var AUTO = 7000, cur = 0, pv = 0, pt = null;
-  var FF = "-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif";
+  var FF = "'Rubik',sans-serif";
+
+  if(!document.querySelector('#bbw-rubik-font')){
+    var fontLink = document.createElement('link');
+    fontLink.id = 'bbw-rubik-font';
+    fontLink.rel = 'stylesheet';
+    fontLink.href = 'https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap';
+    document.head.appendChild(fontLink);
+  }
 
   var css = [
     /* ── ROOT: desktop floats bottom-left, mobile same anchor ── */
