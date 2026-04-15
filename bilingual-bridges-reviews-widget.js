@@ -43,7 +43,7 @@
   var css = [
     /* ── ROOT: desktop floats bottom-left, mobile same anchor ── */
     '#bbw{position:fixed!important;bottom:28px!important;left:28px!important;z-index:999998!important;font-family:'+FF+'!important;line-height:normal!important;box-sizing:border-box!important;width:min(340px,calc(100vw - 32px))!important}',
-    '#bbw *,#bbw *::before,#bbw *::after{box-sizing:border-box!important;margin:0!important;padding:0!important;line-height:normal!important;font-family:'+FF+'!important}',
+    '#bbw *,#bbw *::before,#bbw *::after{box-sizing:border-box!important;margin:0!important;padding:0!important;line-height:1.5!important;font-family:'+FF+'!important}',
 
     /* ── DESKTOP PILL (hidden on mobile) ── */
     '#bbw-pill{display:flex!important;align-items:center!important;gap:10px!important;background:#fff!important;border:1.5px solid #e5e5e5!important;border-radius:100px!important;padding:9px 16px 9px 10px!important;cursor:pointer!important;box-shadow:0 6px 24px rgba(0,0,0,.12)!important;transition:transform .2s,box-shadow .2s!important;user-select:none!important}',
@@ -90,7 +90,7 @@
     '@keyframes bbwIn{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:translateX(0)}}',
     '.bbw-s-stars{display:flex!important;gap:3px!important}',
     '.bbw-s-stars svg{width:14px!important;height:14px!important;fill:#e8a020!important;display:block!important}',
-    '.bbw-s-text{font-size:13px!important;line-height:1.75!important;color:#444!important;font-weight:300!important;word-break:break-word!important}',
+    '.bbw-s-text{font-size:13px!important;line-height:1.85!important;color:#444!important;font-weight:300!important;word-break:break-word!important}',
     '.bbw-s-author{display:flex!important;align-items:center!important;gap:10px!important;padding-top:8px!important;border-top:1px solid #f5f5f5!important;margin-top:4px!important}',
     '.bbw-s-avatar{width:34px!important;height:34px!important;min-width:34px!important;border-radius:50%!important;background:#111!important;color:#fff!important;font-size:11px!important;font-weight:600!important;display:flex!important;align-items:center!important;justify-content:center!important;letter-spacing:.04em!important}',
     '.bbw-s-info{flex:1!important;min-width:0!important}',
